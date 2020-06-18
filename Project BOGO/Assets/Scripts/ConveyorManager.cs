@@ -56,7 +56,7 @@ public class ConveyorManager : MonoBehaviour
             if(left.GetComponent<Conveyor>().myProduct)
             {
                 left.GetComponent<BoxCollider2D>().enabled = false;
-                left.GetComponent<Conveyor>().myProduct.GetComponent<Product>().target = gameObject;
+                left.GetComponent<Conveyor>().myProduct.GetComponent<Product>().nextConveyor = gameObject;
                 left.GetComponent<Conveyor>().myProduct.GetComponent<Product>().conveyorOn = true;
                 
                 

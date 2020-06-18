@@ -10,7 +10,7 @@ public class Product : MonoBehaviour
 
     private float moveSpeed = 5f;
     public bool conveyorOn = false;
-    public GameObject target = null;
+    public GameObject nextConveyor = null;
     
 
     // Start is called before the first frame update
@@ -26,7 +26,7 @@ public class Product : MonoBehaviour
         if (conveyorOn)
         {
             float step = moveSpeed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, target.transform.position, -step);
+            transform.position = Vector3.MoveTowards(transform.position, nextConveyor.transform.position, -step);
         }
     }
 
@@ -35,7 +35,7 @@ public class Product : MonoBehaviour
         if(collision.CompareTag("Conveyor"))
         {
             conveyorOn = false;
-            target = null;
+            nextConveyor = null;
         }
     }
 }
