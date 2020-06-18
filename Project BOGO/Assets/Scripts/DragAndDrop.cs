@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class DragAndDrop : MonoBehaviour
 {
-    public bool isProduct; // else is coupon
-    public bool movable = true;
+    public bool isAProduct; // else is coupon
+    public bool draggable = true;
     public GameObject closestConveyor = null;
     int convCount = 0;
     Touch t;
@@ -14,7 +14,8 @@ public class DragAndDrop : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if( Input.touchCount > 0 && movable)
+        // 
+        if( Input.touchCount > 0 && draggable)
         {
             t = Input.GetTouch(0);
             Vector3 tPos = Camera.main.ScreenToWorldPoint(t.position);
@@ -26,9 +27,9 @@ public class DragAndDrop : MonoBehaviour
         {
             if (closestConveyor != null)
             {
-                movable = false;
+                draggable = false;
                 transform.position = closestConveyor.transform.position;
-                if (isProduct)
+                if (isAProduct)
                     closestConveyor.GetComponent<Conveyor>().myProduct = this.gameObject;
                 else
                     closestConveyor.GetComponent<Conveyor>().myCoupon = this.gameObject;
