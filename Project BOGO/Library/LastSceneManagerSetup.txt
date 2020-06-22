@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/Checkout.unity
+- path: Assets/Scenes/Drag.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
