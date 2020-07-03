@@ -8,18 +8,24 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 {
     public Transform returnToMe = null;
     public Transform placeholderParent = null;
+    public Sprite placeholderSprite = null;
     GameObject placeholder = null;
     public enum Slot { PRODUCT, COUPON };
     public Slot typeOfItem = Slot.PRODUCT;
+    private bool setOnConveyor = false;
+
+
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        Debug.Log("OnBeginDrag");
-
         placeholder = new GameObject();
-        placeholder.name = "Empty Spot";
+        placeholder.name = "Drop Here";
         placeholder.transform.SetParent(transform.parent);
         placeholder.AddComponent<RectTransform>();
-        placeholder.GetComponent<RectTransform>().sizeDelta = new Vector2(125, 200);
+        placeholder.AddComponent<Image>();
+        placeholder.GetComponent<Image>().sprite = placeholderSprite;
+        placeholder.GetComponent<Image>().color = Color.yellow;
+        placeholder.GetComponent<RectTransform>().sizeDelta = new Vector2(100, 100);
         LayoutElement layel = placeholder.AddComponent<LayoutElement>();
         layel.preferredHeight = GetComponent<LayoutElement>().preferredHeight;
         layel.preferredWidth = GetComponent<LayoutElement>().preferredWidth;
@@ -39,38 +45,62 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("OnDrag");
-
         transform.position = eventData.position;
 
-        if(placeholder.transform.parent != placeholderParent)
-            placeholder.transform.SetParent(placeholderParent);
-
-        int newSiblingIndex = placeholderParent.childCount;
-        for(int i = 0; i < placeholderParent.childCount; ++i)
+        // If we drag over an outside object that isn't where we came from
+        if (placeholder.transform.parent != placeholderParent)
         {
-            if(transform.position.x < placeholderParent.GetChild(i).position.x)
+            // If that object is a dropzone that isn't full
+            if (placeholderParent.transform.GetComponent<Dropzone>() != null &&
+                placeholderParent.transform.childCount < placeholderParent.transform.GetComponent<Dropzone>().cap)
             {
-                newSiblingIndex = i;
-
-                if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
-                    --newSiblingIndex;
-
-                break;
+                // Show drop squre
+                placeholder.transform.SetParent(placeholderParent);
             }
         }
+        else
+        {
+            // Show the drop square in the right place
+            Dropzone d = placeholderParent.GetComponent<Dropzone>();
+            if ( d !=  null )
+            {
+                int newSiblingIndex = placeholderParent.childCount;
+                for (int i = 0; i < placeholderParent.childCount; ++i)
+                {
+                    if (transform.position.x < placeholderParent.GetChild(i).position.x &&
+                        transform.position.y < placeholderParent.GetChild(i).position.y)
+                    {
+                        newSiblingIndex = i;
 
-        placeholder.transform.SetSiblingIndex(newSiblingIndex);
+                        if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
+                            --newSiblingIndex;
+
+                        break;
+                    }
+                }
+                placeholder.transform.SetSiblingIndex(newSiblingIndex);
+            }
+
+        }
     }
     
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("OnEndDrag");
+        if (setOnConveyor)
+            return;
 
         transform.SetParent(returnToMe);
         transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
         Destroy(placeholder);
 
+        GameObject lane = GameObject.Find("CheckoutLane");
+        if ( typeOfItem == Slot.PRODUCT)
+        {
+            if (lane.GetComponent<ConveyorLogic>() != null)
+            {
+                lane.GetComponent<ConveyorLogic>().countProducts();
+            }
+        }
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
 }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Product
   - Conveyor
+  - EmptySpot
   layers:
   - Default
   - TransparentFX

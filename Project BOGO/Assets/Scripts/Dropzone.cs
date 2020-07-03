@@ -5,6 +5,14 @@ using UnityEngine.EventSystems;
 
 public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler
 {
+    public int cap;
+    public bool StartOffDisabled;
+
+    private void Awake()
+    {
+        if(StartOffDisabled)
+            gameObject.SetActive(false);
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -28,10 +36,14 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log(eventData.pointerDrag.name + " was dropped on " + gameObject.name);
-
+        int productCount = transform.childCount;
+        for( int i = 0; i < productCount; ++i )
+        {
+            if (!transform.GetChild(i).CompareTag("Product"))
+                --productCount;
+        }
         Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
-        if( d != null )
+        if( d != null && productCount < cap)
         {
             d.returnToMe = transform;
         }
