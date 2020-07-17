@@ -17,7 +17,7 @@ public class UIManager : MonoBehaviour
     public void SetMoneyUI( int t )
     {
         m = t;
-        money.text = "TOTAL    " + t.ToString("N2");
+        money.text = t.ToString("N2");
         //money.text.Replace("$", "");
     }
 

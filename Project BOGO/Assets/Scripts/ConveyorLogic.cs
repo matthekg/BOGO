@@ -17,6 +17,7 @@ public class ConveyorLogic : MonoBehaviour
             Transform item = drop.transform.GetChild(0);
             item.SetParent(transform, false);
             item.SetSiblingIndex(0);
+            item.GetComponent<Draggable>().shouldntMove = true;
             return true;
         }
         return false;
@@ -37,9 +38,7 @@ public class ConveyorLogic : MonoBehaviour
     {
         // If there's an item get it
         if( getFromDrop() )
-        {
-
-        }
+        {}
         // Otherwise move the conveyor and put an empty spot
         else
         {

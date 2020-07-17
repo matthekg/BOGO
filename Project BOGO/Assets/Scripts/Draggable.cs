@@ -12,12 +12,15 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     GameObject placeholder = null;
     public enum Slot { PRODUCT, COUPON };
     public Slot typeOfItem = Slot.PRODUCT;
-    private bool setOnConveyor = false;
+    public bool shouldntMove = false;
 
 
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (shouldntMove)
+            return;
+
         placeholder = new GameObject();
         placeholder.name = "Drop Here";
         placeholder.transform.SetParent(transform.parent);
@@ -45,6 +48,9 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (shouldntMove)
+            return;
+
         transform.position = eventData.position;
 
         // If we drag over an outside object that isn't where we came from
@@ -86,7 +92,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (setOnConveyor)
+        if (shouldntMove)
             return;
 
         transform.SetParent(returnToMe);
