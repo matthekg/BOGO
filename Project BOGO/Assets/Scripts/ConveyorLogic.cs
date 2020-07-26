@@ -53,6 +53,7 @@ public class ConveyorLogic : MonoBehaviour
             Scan();
         }
 
+        countProducts();
     }
 
 
@@ -65,8 +66,8 @@ public class ConveyorLogic : MonoBehaviour
             Destroy(target);
         else
         {
-            Product p = target.GetComponent<ProductInfo>().product;
-            uiManager.AddMoney( p.price );
+            ProductInfo p = target.GetComponent<ProductInfo>();
+            uiManager.AddMoney( p.currentPrice );
             Destroy(target);
         }
     }

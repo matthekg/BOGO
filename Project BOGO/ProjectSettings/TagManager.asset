@@ -7,6 +7,7 @@ TagManager:
   - Product
   - Conveyor
   - EmptySpot
+  - Coupon
   layers:
   - Default
   - TransparentFX

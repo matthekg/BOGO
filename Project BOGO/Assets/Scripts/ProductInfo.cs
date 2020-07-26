@@ -13,6 +13,13 @@ public class ProductInfo : MonoBehaviour
     public Image artworkImage;
 
     public Text priceText;
+
+    [Space(10)]
+    [Header("Product Stats")]
+    private float basePrice;
+
+    public float currentPrice;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +29,11 @@ public class ProductInfo : MonoBehaviour
         artworkImage.sprite = product.art;
 
         priceText.text = "$" + product.price.ToString();
+        basePrice = currentPrice = product.price;
     }
+    public void UpdateStatsUI()
+    {
+        priceText.text = currentPrice.ToString();
+    }    
 
 }

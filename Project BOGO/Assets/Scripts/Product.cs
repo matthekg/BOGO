@@ -10,7 +10,7 @@ public class Product : ScriptableObject
 
     public Sprite art;
 
-    public int price;
+    public float price;
 
     public void Print()
     {

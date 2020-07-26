@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     private Text money;
-    private int m = 0;
+    private float m = 0;
 
     private void Awake()
     {
@@ -14,14 +14,14 @@ public class UIManager : MonoBehaviour
         SetMoneyUI(0);
     }
 
-    public void SetMoneyUI( int t )
+    public void SetMoneyUI( float t )
     {
         m = t;
         money.text = t.ToString("N2");
         //money.text.Replace("$", "");
     }
 
-    public void AddMoney( int t )
+    public void AddMoney( float t )
     {
         SetMoneyUI(m + t);
     }

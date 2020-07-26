@@ -7,8 +7,11 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 {
     public int cap;
     public bool StartOffDisabled;
+    public enum Slot { PRODUCT, COUPON };
+    public Slot AcceptedType = Slot.PRODUCT;
 
-    private void Awake()
+
+    private void Start()
     {
         if(StartOffDisabled)
             gameObject.SetActive(false);
@@ -20,7 +23,7 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
             return;
 
         Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
-        if (d != null)
+        if (d != null && (int)d.typeOfItem == (int)AcceptedType)
             d.placeholderParent = transform;
     }
 
@@ -36,14 +39,17 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
 
     public void OnDrop(PointerEventData eventData)
     {
+        // Make sure we aren't at [cap]acity
         int productCount = transform.childCount;
         for( int i = 0; i < productCount; ++i )
         {
             if (!transform.GetChild(i).CompareTag("Product"))
                 --productCount;
         }
+
+        // Set ourselves as the draggable's parent
         Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
-        if( d != null && productCount < cap)
+        if( d != null && productCount < cap && (int)d.typeOfItem == (int)AcceptedType)
         {
             d.returnToMe = transform;
         }

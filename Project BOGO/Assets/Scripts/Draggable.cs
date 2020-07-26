@@ -11,9 +11,14 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public Sprite placeholderSprite = null;
     GameObject placeholder = null;
     public enum Slot { PRODUCT, COUPON };
-    public Slot typeOfItem = Slot.PRODUCT;
+    public Slot typeOfItem;
     public bool shouldntMove = false;
+    GameObject lane;
 
+    public void Awake()
+    {
+        lane = GameObject.Find("CheckoutLane");
+    }
 
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -98,15 +103,31 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         transform.SetParent(returnToMe);
         transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
         Destroy(placeholder);
+        
 
-        GameObject lane = GameObject.Find("CheckoutLane");
-        if ( typeOfItem == Slot.PRODUCT)
+        // If we're dragging a product to the dropzone, turn on it's couponzone.
+        if( transform.childCount > 4)
         {
-            if (lane.GetComponent<ConveyorLogic>() != null)
+            Transform couponzone = transform.GetChild(4); // Should be the CouponZone
+            if( typeOfItem == Slot.PRODUCT && transform.parent.name == "DropArea" )
             {
-                lane.GetComponent<ConveyorLogic>().countProducts();
+                if( couponzone.name == "CouponZone")
+                    couponzone.gameObject.SetActive(true);
             }
+            else
+                if (couponzone.name == "CouponZone")
+                    couponzone.gameObject.SetActive(false);
         }
+
+        // If we're dragging a coupon, apply the coupon
+
+        if ( typeOfItem == Slot.COUPON )
+        {
+            // Set the coupon at the beginning
+            transform.SetSiblingIndex(0);
+            transform.parent.GetComponent<CouponScanner>().scanNewCoupon();
+        }
+
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
 }
