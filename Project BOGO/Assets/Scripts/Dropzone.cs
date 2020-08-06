@@ -40,16 +40,16 @@ public class Dropzone : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPoin
     public void OnDrop(PointerEventData eventData)
     {
         // Make sure we aren't at [cap]acity
-        int productCount = transform.childCount;
-        for( int i = 0; i < productCount; ++i )
+        int itemCount = transform.childCount;
+        for( int i = 0; i < itemCount; ++i )
         {
-            if (!transform.GetChild(i).CompareTag("Product"))
-                --productCount;
+            if (transform.GetChild(i).name == "Drop Here" )
+                --itemCount;
         }
 
         // Set ourselves as the draggable's parent
         Draggable d = eventData.pointerDrag.GetComponent<Draggable>();
-        if( d != null && productCount < cap && (int)d.typeOfItem == (int)AcceptedType)
+        if( d != null && itemCount < cap && (int)d.typeOfItem == (int)AcceptedType)
         {
             d.returnToMe = transform;
         }

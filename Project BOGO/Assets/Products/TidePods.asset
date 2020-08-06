@@ -15,4 +15,4 @@ MonoBehaviour:
   name: Tide Pods
   description: Tried and True!
   art: {fileID: 21300000, guid: a7f464f67ce865b4ea37e9bf79476120, type: 3}
-  price: 5
+  price: 10

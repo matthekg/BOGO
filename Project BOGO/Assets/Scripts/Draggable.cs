@@ -49,6 +49,11 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
         GetComponent<CanvasGroup>().blocksRaycasts = false;
 
+        // If we're dragging coupon off of a product, undo the effect
+        if (typeOfItem == Slot.COUPON && placeholderParent.parent.CompareTag("Product"))
+        {
+            GetComponent<CouponAbstract>().UndoMe(placeholderParent.GetComponentInParent<ProductInfo>());
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -75,26 +80,35 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             Dropzone d = placeholderParent.GetComponent<Dropzone>();
             if ( d !=  null )
             {
+
                 int newSiblingIndex = placeholderParent.childCount;
-                for (int i = 0; i < placeholderParent.childCount; ++i)
+                if (typeOfItem == Slot.COUPON)
                 {
-                    if (transform.position.x < placeholderParent.GetChild(i).position.x &&
-                        transform.position.y < placeholderParent.GetChild(i).position.y)
+                    newSiblingIndex = 0;
+                }
+                else
+                {
+                    for (int i = 0; i < placeholderParent.childCount; ++i)
                     {
-                        newSiblingIndex = i;
+                        if (transform.position.x < placeholderParent.GetChild(i).position.x &&
+                            transform.position.y < placeholderParent.GetChild(i).position.y)
+                        {
+                            newSiblingIndex = i;
 
-                        if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
-                            --newSiblingIndex;
+                            if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
+                                --newSiblingIndex;
 
-                        break;
+                            break;
+                        }
                     }
+
                 }
                 placeholder.transform.SetSiblingIndex(newSiblingIndex);
             }
 
         }
     }
-    
+
     public void OnEndDrag(PointerEventData eventData)
     {
         if (shouldntMove)
@@ -108,7 +122,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         // If we're dragging a product to the dropzone, turn on it's couponzone.
         if( transform.childCount > 4)
         {
-            Transform couponzone = transform.GetChild(4); // Should be the CouponZone
+            Transform couponzone = transform.GetChild(2); // Should be the CouponZone
             if( typeOfItem == Slot.PRODUCT && transform.parent.name == "DropArea" )
             {
                 if( couponzone.name == "CouponZone")
@@ -125,7 +139,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         {
             // Set the coupon at the beginning
             transform.SetSiblingIndex(0);
-            transform.parent.GetComponent<CouponScanner>().scanNewCoupon();
+            if( transform.parent.GetComponent<CouponScanner>())
+                transform.parent.GetComponent<CouponScanner>().scanNewCoupon();
         }
 
         GetComponent<CanvasGroup>().blocksRaycasts = true;

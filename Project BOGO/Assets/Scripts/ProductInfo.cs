@@ -33,7 +33,7 @@ public class ProductInfo : MonoBehaviour
     }
     public void UpdateStatsUI()
     {
-        priceText.text = currentPrice.ToString();
+        priceText.text = "$" + currentPrice.ToString();// ("00.00");
     }    
 
 }

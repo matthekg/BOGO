@@ -8,10 +8,8 @@ public class CouponScanner : MonoBehaviour
     public void scanNewCoupon()
     {
         GameObject newCoupon = transform.GetChild(0).gameObject;
-        print(newCoupon);
         if( newCoupon.GetComponent<CouponInfo>() != null )
         {
-            print("SCAN!");
             newCoupon.GetComponent<CouponAbstract>().ScanMe();
         }
         

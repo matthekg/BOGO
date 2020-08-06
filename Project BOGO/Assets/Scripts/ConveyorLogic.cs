@@ -7,6 +7,7 @@ public class ConveyorLogic : MonoBehaviour
     public UIManager uiManager = null;
     public GameObject empty;
     public GameObject drop;
+    public GameObject boughtArea;
     public int productCount = 0;
 
 
@@ -57,7 +58,7 @@ public class ConveyorLogic : MonoBehaviour
     }
 
 
-    // Scans the product first in queue, destroying it
+    // Scans the product first in queue, then move it to BoughtItems
     public void Scan()
     {
         GameObject target = transform.GetChild(transform.childCount - 1).gameObject;
@@ -68,7 +69,7 @@ public class ConveyorLogic : MonoBehaviour
         {
             ProductInfo p = target.GetComponent<ProductInfo>();
             uiManager.AddMoney( p.currentPrice );
-            Destroy(target);
+            target.transform.SetParent(boughtArea.transform);
         }
     }
 }

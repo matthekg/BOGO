@@ -11,6 +11,7 @@ public class CouponInfo : MonoBehaviour
     public Image artworkImage;
 
     public float discount;
+    public float percDiscount;
 
     private void Awake()
     {
@@ -20,9 +21,16 @@ public class CouponInfo : MonoBehaviour
         artworkImage.sprite = coupon.art;
 
         discount = coupon.discount;
+        percDiscount = coupon.percentDiscount;
+
         if (discount != 0)
         {
             this.gameObject.AddComponent<Discount>();
+        }
+
+        if (percDiscount != 0)
+        {
+            this.gameObject.AddComponent<PercentDiscount>();
         }
             
     }
