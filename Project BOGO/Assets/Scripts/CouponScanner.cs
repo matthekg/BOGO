@@ -14,4 +14,10 @@ public class CouponScanner : MonoBehaviour
         }
         
     }
+
+    public void attachNewCoupon( CouponInfo c )
+    {
+        c.transform.SetParent(transform);
+        scanNewCoupon();
+    }
 }

@@ -10,13 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d023b60e87f967140bcc36fb54e715d1, type: 3}
-  m_Name: BOGO
+  m_Name: Set $
   m_EditorClassIdentifier: 
-  name: BOGO FREE
-  description: Apply on a product to grant my discount to a duplicate product
+  name: Get a product for 1$
+  description: Set a product's price to 1$
   art: {fileID: 21300000, guid: da289747c625fc54b9890aa5bee24d8c, type: 3}
   mustBePlacedOnItem: 1
   discount: 0
   percentDiscount: 0
-  setAmount: 0
-  bogo: 100
+  setAmount: 1

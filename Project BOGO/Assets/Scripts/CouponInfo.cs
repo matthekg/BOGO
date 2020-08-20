@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class CouponInfo : MonoBehaviour
 {
-    public Coupon coupon;
+    public Coupon couponLogic;
 
     public Text nameText;
     public Text descriptionText;
@@ -12,17 +12,28 @@ public class CouponInfo : MonoBehaviour
 
     public float discount;
     public float percDiscount;
+    public float setPrice;
+    public float bogo;
 
     private void Awake()
     {
-        nameText.text = coupon.name;
-        descriptionText.text = coupon.description;
+        nameText.text = couponLogic.name;
+        descriptionText.text = couponLogic.description;
 
-        artworkImage.sprite = coupon.art;
+        artworkImage.sprite = couponLogic.art;
 
-        discount = coupon.discount;
-        percDiscount = coupon.percentDiscount;
 
+
+        // Turn this generic coupon into its specified coupon
+        discount = couponLogic.discount;
+        percDiscount = couponLogic.percentDiscount;
+        setPrice = couponLogic.setAmount;
+        bogo = couponLogic.bogo;
+        ApplyComponents();
+    }
+
+    private void ApplyComponents()
+    {
         if (discount != 0)
         {
             this.gameObject.AddComponent<Discount>();
@@ -32,7 +43,17 @@ public class CouponInfo : MonoBehaviour
         {
             this.gameObject.AddComponent<PercentDiscount>();
         }
-            
+
+        if (setPrice != 0)
+        {
+            this.gameObject.AddComponent<SetPrice>();
+        }
+
+        if (bogo != 0 )
+        {
+            this.gameObject.AddComponent<BOGO>();
+        }
+
     }
 
 

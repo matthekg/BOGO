@@ -15,6 +15,8 @@ public class Coupon : ScriptableObject
     [Header("Abilities")]
     public float discount = 0;
     public float percentDiscount = 0;
+    public float setAmount = 0;
+    public float bogo = 0;
 
 
 
