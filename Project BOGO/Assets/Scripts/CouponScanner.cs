@@ -5,7 +5,15 @@ using UnityEngine;
 
 public class CouponScanner : MonoBehaviour
 {
-    public void scanNewCoupon()
+    /*private void OnEnable()
+    {
+        int couponCount = transform.childCount;
+        for( int i = 0; i < couponCount; ++i )
+        {
+            
+        }
+    }*/
+    public void ScanNewCoupon()
     {
         GameObject newCoupon = transform.GetChild(0).gameObject;
         if( newCoupon.GetComponent<CouponInfo>() != null )
@@ -15,9 +23,10 @@ public class CouponScanner : MonoBehaviour
         
     }
 
-    public void attachNewCoupon( CouponInfo c )
+    public void AttachNewCoupon( CouponInfo c )
     {
         c.transform.SetParent(transform);
-        scanNewCoupon();
+        c.transform.localScale = new Vector3(1,1,1);
+        ScanNewCoupon();
     }
 }

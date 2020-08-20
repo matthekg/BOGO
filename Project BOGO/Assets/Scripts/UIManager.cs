@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,9 @@ public class UIManager : MonoBehaviour
     private float m = 0;
     public GameObject helperPanel;
     public CouponInfo floatingCoupon;
+    public ProductInfo chosenTarget;
+    public bool clickDone = false;
+    public bool applyingNewCoupon = false;
 
     private void Awake()
     {
@@ -41,4 +45,29 @@ public class UIManager : MonoBehaviour
     {
         helperPanel.SetActive(false);
     }
+
+    public IEnumerator WaitForClick()
+    {        
+        while(true)
+        {
+            if( clickDone )
+            {
+                yield break;
+            }
+            yield return null;
+        }
+    }
+
+    public void GiveTargetFloatingCoupon()
+    {
+        if( floatingCoupon != null && chosenTarget != null )
+        {
+            chosenTarget.couponScanner.GetComponent<CouponScanner>().AttachNewCoupon(floatingCoupon);
+            chosenTarget.SetCouponIndicator();
+            floatingCoupon = null;
+            chosenTarget = null;
+
+        }
+    }
+
 }

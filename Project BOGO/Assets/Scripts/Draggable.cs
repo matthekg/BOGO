@@ -123,14 +123,12 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         if( transform.childCount > 4)
         {
             Transform couponzone = transform.GetChild(2); // Should be the CouponZone
-            if( typeOfItem == Slot.PRODUCT && transform.parent.name == "DropArea" )
+            if (typeOfItem == Slot.PRODUCT && transform.parent.name == "DropArea")
             {
-                if( couponzone.name == "CouponZone")
-                    couponzone.gameObject.SetActive(true);
+                GetComponent<ProductInfo>().SetUIToConveyorMode();
             }
             else
-                if (couponzone.name == "CouponZone")
-                    couponzone.gameObject.SetActive(false);
+                GetComponent<ProductInfo>().SetUIToCartMode();
         }
 
         // If we're dragging a coupon, apply the coupon
@@ -140,7 +138,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             // Set the coupon at the beginning
             transform.SetSiblingIndex(0);
             if( transform.parent.GetComponent<CouponScanner>())
-                transform.parent.GetComponent<CouponScanner>().scanNewCoupon();
+                transform.parent.GetComponent<CouponScanner>().ScanNewCoupon();
         }
 
         GetComponent<CanvasGroup>().blocksRaycasts = true;
