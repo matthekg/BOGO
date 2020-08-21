@@ -49,11 +49,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
         GetComponent<CanvasGroup>().blocksRaycasts = false;
 
-        // If we're dragging coupon off of a product, undo the effect
-        if (typeOfItem == Slot.COUPON && placeholderParent.parent.CompareTag("Product"))
-        {
-            GetComponent<CouponAbstract>().UndoMe(placeholderParent.GetComponentInParent<ProductInfo>());
-        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -138,9 +133,18 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
             // Set the coupon at the beginning
             transform.SetSiblingIndex(0);
             if( transform.parent.GetComponent<CouponScanner>())
-                transform.parent.GetComponent<CouponScanner>().ScanNewCoupon();
+            {
+                transform.parent.GetComponent<CouponScanner>().AttachNewCoupon( GetComponent<CouponInfo>() );
+            }
         }
 
         GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+        // If we're dragging coupon off of a product, undo the effect once it lands in the coupon pouch
+        if (typeOfItem == Slot.COUPON && placeholderParent.name == "CouponPouch")
+        {
+            GetComponent<CouponAbstract>().UndoMe( GetComponent<CouponInfo>().last.transform.GetComponentInParent<ProductInfo>() );
+        }
+
     }
 }
