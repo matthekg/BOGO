@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SetPrice : CouponAbstract
 {
-    private float newAmount;
+    public float newAmount;
     public float oldAmount;
 
     private void SetPriceOf( ProductInfo target, bool reverse = false )

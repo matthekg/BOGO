@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/BOGO_backup_08-14-20.unity
+- path: Assets/Scenes/Drag.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

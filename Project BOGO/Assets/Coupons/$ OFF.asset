@@ -18,3 +18,5 @@ MonoBehaviour:
   mustBePlacedOnItem: 1
   discount: 1
   percentDiscount: 0
+  setAmount: -1
+  bogo: 0

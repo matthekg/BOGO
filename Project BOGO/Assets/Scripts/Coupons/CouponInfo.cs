@@ -46,7 +46,7 @@ public class CouponInfo : MonoBehaviour
             this.gameObject.AddComponent<PercentDiscount>();
         }
 
-        if (setPrice != 0 && !this.gameObject.GetComponent<SetPrice>())
+        if (setPrice != -1 && !this.gameObject.GetComponent<SetPrice>())
         {
             this.gameObject.AddComponent<SetPrice>();
         }

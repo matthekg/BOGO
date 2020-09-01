@@ -17,6 +17,6 @@ MonoBehaviour:
   art: {fileID: 21300000, guid: da289747c625fc54b9890aa5bee24d8c, type: 3}
   mustBePlacedOnItem: 1
   discount: 0
-  percentDiscount: 100
+  percentDiscount: 0
   setAmount: 0
   bogo: 0

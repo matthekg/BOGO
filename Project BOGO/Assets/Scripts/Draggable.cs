@@ -14,10 +14,12 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public Slot typeOfItem;
     public bool shouldntMove = false;
     GameObject lane;
+    UIManager ui;
 
     public void Awake()
     {
         lane = GameObject.Find("CheckoutLane");
+        ui = GameObject.Find("UIManager").GetComponent<UIManager>();
     }
 
 
@@ -48,6 +50,15 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         transform.SetParent( transform.root );
 
         GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+        // If we're taking a coupon off a product, open the coupon pouch so they can drop it in there
+        if( typeOfItem == Slot.COUPON && returnToMe.parent.CompareTag("Product") )
+        {
+            if( !ui.couponPouch.gameObject.activeInHierarchy )
+            {
+                ui.couponPouch.ToggleOpen();
+            }
+        }
 
     }
 
@@ -115,7 +126,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         
 
         // If we're dragging a product to the dropzone, turn on it's couponzone.
-        if( transform.childCount > 4)
+        if( typeOfItem == Slot.PRODUCT && placeholderParent.name == "DropArea")
         {
             Transform couponzone = transform.GetChild(2); // Should be the CouponZone
             if (typeOfItem == Slot.PRODUCT && transform.parent.name == "DropArea")
@@ -126,25 +137,28 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
                 GetComponent<ProductInfo>().SetUIToCartMode();
         }
 
-        // If we're dragging a coupon, apply the coupon
+        // If we're dragging coupon off of a product, undo the effect once it lands in the coupon pouch, or a new product
+        if (typeOfItem == Slot.COUPON && GetComponent<CouponInfo>().last != null && (placeholderParent.name == "CouponPouch" || (GetComponent<CouponInfo>().last.transform != returnToMe.transform )))
+        {
+            
+            GetComponent<CouponAbstract>().UndoMe( GetComponent<CouponInfo>().last.transform.GetComponentInParent<ProductInfo>() );
+            GetComponent<CouponInfo>().last = null;
+        }
 
-        if ( typeOfItem == Slot.COUPON )
+        // If we're dragging a coupon, apply the coupon. Do not reapply coupons if they were just on that product
+        if ( typeOfItem == Slot.COUPON && GetComponent<CouponInfo>().last != returnToMe.GetComponent<CouponScanner>() )
         {
             // Set the coupon at the beginning
             transform.SetSiblingIndex(0);
             if( transform.parent.GetComponent<CouponScanner>())
             {
+                print("Applying new coupon");
                 transform.parent.GetComponent<CouponScanner>().AttachNewCoupon( GetComponent<CouponInfo>() );
             }
         }
 
         GetComponent<CanvasGroup>().blocksRaycasts = true;
 
-        // If we're dragging coupon off of a product, undo the effect once it lands in the coupon pouch
-        if (typeOfItem == Slot.COUPON && placeholderParent.name == "CouponPouch")
-        {
-            GetComponent<CouponAbstract>().UndoMe( GetComponent<CouponInfo>().last.transform.GetComponentInParent<ProductInfo>() );
-        }
 
     }
 }

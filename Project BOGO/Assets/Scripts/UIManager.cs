@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour
 {
     private Text money;
     private float m = 0;
+    public Minimize cart;
+    public Minimize couponPouch;
     public GameObject helperPanel;
     public CouponInfo floatingCoupon;
     public ProductInfo chosenTarget;
@@ -16,6 +18,8 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        cart = GameObject.Find("Cart").GetComponent<Minimize>();
+        couponPouch = GameObject.Find("CouponPouch").GetComponent<Minimize>();
         helperPanel = GameObject.Find("HelperPanel");
         TurnOffHelperPanel();
 

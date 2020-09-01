@@ -63,16 +63,19 @@ public class BOGO : CouponAbstract
     public override void UndoMe(ProductInfo target)
     {
         GameObject destroyMeAfter = null;
+        print(chosen.name);
         foreach( CouponInfo coupon in chosen.couponScanner.GetComponent<CouponScanner>().myCoupons )
         {
             if( coupon.couponLogic.name == "FREE" )
             {
-                print("FOUND");
-                coupon.GetComponent<CouponAbstract>().UndoMe(chosen);
-                destroyMeAfter = coupon.gameObject;
+                if( coupon != null )
+                {
+                    coupon.GetComponent<CouponAbstract>().UndoMe(chosen);
+                    destroyMeAfter = coupon.gameObject;
+                }
             }
         }
-
+        chosen = null;
         Destroy(destroyMeAfter);
     }
 }
